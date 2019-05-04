@@ -3,6 +3,9 @@ package services;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * FightDetails is a collection of rounds which saves the details of a fight.
+ */
 public class FightDetails {
 
     private int roundsNumber;

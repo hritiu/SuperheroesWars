@@ -77,6 +77,9 @@ public class Repository {
         return null;
     }
 
+    /**
+     * Splits the characters into heroes and villains.
+     */
     public void splitCharacters(){
         this.villains = new ArrayList<>();
         this.heroes = new ArrayList<>();

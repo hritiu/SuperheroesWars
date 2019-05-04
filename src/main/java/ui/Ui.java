@@ -9,6 +9,8 @@ import java.util.*;
 
 public class Ui {
     private final int MIN_NO_OF_AVENGERS = 2;
+    private final String CHARACTER = "character";
+    private final String PLANET = "planet";
 
     private Controller controller;
     private Scanner scanner;
@@ -48,6 +50,11 @@ public class Ui {
         return value;
     }
 
+    /**
+     * A menu for selecting the input files
+     * @param entityType = character or planet
+     * @throws IOException
+     */
     private void inputFileMenu(String entityType) throws IOException {
         Random random = new Random();
         int value = -1;
@@ -238,7 +245,14 @@ public class Ui {
         System.out.println("------------------------------------------------------------------------ \n\n");
     }
 
-    private void fight(Planet planet, Character villain, Character hero) throws InterruptedException {
+    /**
+     * Prints the details of a fight between a character and a villain
+     * @param planet = the planet on which the fight takes place
+     * @param villain = the villain
+     * @param hero = the hero
+     * @throws InterruptedException
+     */
+    private void printCharacterVsVillainFight(Planet planet, Character villain, Character hero) throws InterruptedException {
         FightDetails fightDetails = this.controller.heroVsVillainFight(hero, villain, planet);
 
         fightDetails.getRoundByRoundNumber(0).printRound();
@@ -287,6 +301,13 @@ public class Ui {
         System.out.println("0.Go back");
     }
 
+    /**
+     * Prints the details of a fight between a team of avengers and a villain
+     * @param avengers = the team of avengers
+     * @param villain = the villain
+     * @param planet = the planet on which the fight takes place
+     * @throws InterruptedException
+     */
     private void printAvengersFight(List<Character> avengers, Character villain, Planet planet) throws InterruptedException {
         int heroAttackModifier = 0, heroHealthModifier = 0, villainAttackModifier = 0, villainHealthModifier = 0;
         boolean deadHeroes = false;
@@ -346,6 +367,12 @@ public class Ui {
             System.out.println("\n>>>>> BOTH THE VILLAIN AND THE AVENGERS TEAM DIED DURING THE FIGHT <<<<<\n");
     }
 
+    /**
+     * Avengers vs villain fight menu
+     * @param heroes = the avengers
+     * @param villains = the villain
+     * @throws InterruptedException
+     */
     private void avengersVsVillainMenu(List<Character> heroes, List<Character> villains) throws InterruptedException {
         boolean stop = false;
         int value = -1;
@@ -363,14 +390,14 @@ public class Ui {
                 this.printAvengersMenu();
                 value = this.readCommand();
 
-                if(value == 1){
+                if(value == 1){ //1 is for adding a hero to the avengers team
                     hero = this.selectHero(heroes);
                     if(avengers.contains(hero))
                         System.out.println("This hero is already in the Avengers team.");
                     else
                         avengers.add(hero);
                 }
-                else if(value == 2){
+                else if(value == 2){ //2 is for selecting a villain
                     if(villainIsSelected)
                         System.out.println("A villain was already selected.");
                     else {
@@ -378,7 +405,7 @@ public class Ui {
                         villainIsSelected = true;
                     }
                 }
-                else if(value == 3){
+                else if(value == 3){//3 is for choosing a planet and starting the fight
                     if(villain == null)
                         System.out.println("You must select a villain.");
                     else if(avengers.size() < MIN_NO_OF_AVENGERS)
@@ -389,7 +416,7 @@ public class Ui {
                         stop = true;
                     }
                 }
-                else if(value == 0)
+                else if(value == 0) //0 is for going back to the previous menu
                     stop = true;
                 else
                     System.out.println("Invalid option! Please try again.");
@@ -399,32 +426,32 @@ public class Ui {
 
     public void menu() throws IOException, InterruptedException {
         boolean stop = false;
-        int value = -1;
-        Character hero = null, villain = null;
-        Planet planet = null;
+        int value;
+        Character hero, villain;
+        Planet planet;
 
         this.printHeader();
 
         System.out.println("Please choose an input file for characters: ");
-        this.inputFileMenu("character");
+        this.inputFileMenu(CHARACTER);
         System.out.println("Please choose an input file for planets: ");
-        this.inputFileMenu("planet");
+        this.inputFileMenu(PLANET);
 
         while (!stop){
             this.printMenu();
             value = this.readCommand();
 
-            if(value == 1){
+            if(value == 1){//1 is for a fight between a hero and a villain
                 planet = this.selectPlanet();
                 hero = this.selectHero(this.controller.getHeroes());
                 villain = this.selectVillain(this.controller.getVillains());
                 System.out.println("");
-                this.fight(planet, villain, hero);
+                this.printCharacterVsVillainFight(planet, villain, hero);
             }
-            else if(value == 2){
+            else if(value == 2){//2 is for a fight between a team of avengers and a villain
                 this.avengersVsVillainMenu(this.controller.getHeroes(), this.controller.getVillains());
             }
-            else if(value == 0)
+            else if(value == 0) //0 is for exit
                 stop = true;
             else
                 System.out.println("Invalid option! Please try again.");

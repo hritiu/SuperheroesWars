@@ -1,5 +1,8 @@
 package services;
 
+/**
+ * Round saves the stats of each character during a round
+ */
 public class Round {
 
     private String heroName;
